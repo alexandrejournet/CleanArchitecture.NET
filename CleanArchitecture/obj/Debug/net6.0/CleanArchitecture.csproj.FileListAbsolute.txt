@@ -1,7 +1,0 @@
-C:\Programmation\AXOPEN\CleanArchitecture\CleanArchitecture\obj\Debug\net6.0\CleanArchitecture.csproj.AssemblyReference.cache
-C:\Programmation\AXOPEN\CleanArchitecture\CleanArchitecture\obj\Debug\net6.0\CleanArchitecture.GeneratedMSBuildEditorConfig.editorconfig
-C:\Programmation\AXOPEN\CleanArchitecture\CleanArchitecture\obj\Debug\net6.0\CleanArchitecture.AssemblyInfoInputs.cache
-C:\Programmation\AXOPEN\CleanArchitecture\CleanArchitecture\obj\Debug\net6.0\CleanArchitecture.AssemblyInfo.cs
-C:\Programmation\AXOPEN\CleanArchitecture\CleanArchitecture\obj\Debug\net6.0\CleanArchitecture.csproj.CoreCompileInputs.cache
-C:\Programmation\AXOPEN\CleanArchitecture\CleanArchitecture\obj\Debug\net6.0\CleanArchitecture.MvcApplicationPartsAssemblyInfo.cs
-C:\Programmation\AXOPEN\CleanArchitecture\CleanArchitecture\obj\Debug\net6.0\CleanArchitecture.MvcApplicationPartsAssemblyInfo.cache
