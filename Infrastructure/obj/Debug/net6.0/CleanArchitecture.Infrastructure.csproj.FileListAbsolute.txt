@@ -1,0 +1,15 @@
+C:\Programmation\AXOPEN\CleanArchitecture\Infrastructure\bin\Debug\net6.0\CleanArchitecture.Infrastructure.deps.json
+C:\Programmation\AXOPEN\CleanArchitecture\Infrastructure\bin\Debug\net6.0\CleanArchitecture.Infrastructure.dll
+C:\Programmation\AXOPEN\CleanArchitecture\Infrastructure\bin\Debug\net6.0\CleanArchitecture.Infrastructure.pdb
+C:\Programmation\AXOPEN\CleanArchitecture\Infrastructure\bin\Debug\net6.0\CleanArchitecture.Models.dll
+C:\Programmation\AXOPEN\CleanArchitecture\Infrastructure\bin\Debug\net6.0\CleanArchitecture.Models.pdb
+C:\Programmation\AXOPEN\CleanArchitecture\Infrastructure\obj\Debug\net6.0\CleanArchitecture.Infrastructure.csproj.AssemblyReference.cache
+C:\Programmation\AXOPEN\CleanArchitecture\Infrastructure\obj\Debug\net6.0\CleanArchitecture.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Programmation\AXOPEN\CleanArchitecture\Infrastructure\obj\Debug\net6.0\CleanArchitecture.Infrastructure.AssemblyInfoInputs.cache
+C:\Programmation\AXOPEN\CleanArchitecture\Infrastructure\obj\Debug\net6.0\CleanArchitecture.Infrastructure.AssemblyInfo.cs
+C:\Programmation\AXOPEN\CleanArchitecture\Infrastructure\obj\Debug\net6.0\CleanArchitecture.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Programmation\AXOPEN\CleanArchitecture\Infrastructure\obj\Debug\net6.0\CleanArchitecture.Infrastructure.csproj.CopyComplete
+C:\Programmation\AXOPEN\CleanArchitecture\Infrastructure\obj\Debug\net6.0\CleanArchitecture.Infrastructure.dll
+C:\Programmation\AXOPEN\CleanArchitecture\Infrastructure\obj\Debug\net6.0\refint\CleanArchitecture.Infrastructure.dll
+C:\Programmation\AXOPEN\CleanArchitecture\Infrastructure\obj\Debug\net6.0\CleanArchitecture.Infrastructure.pdb
+C:\Programmation\AXOPEN\CleanArchitecture\Infrastructure\obj\Debug\net6.0\ref\CleanArchitecture.Infrastructure.dll
