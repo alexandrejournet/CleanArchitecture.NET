@@ -1,4 +1,4 @@
-﻿namespace CleanArchitecture.Models.Base
+﻿namespace CleanArchitecture.Domain.Base
 {
     public class BaseEntity
     {

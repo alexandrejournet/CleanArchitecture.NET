@@ -1,15 +1,17 @@
-﻿using CleanArchitecture.Application.Extensions;
+﻿using CleanArchitecture.API.Base;
 using CleanArchitecture.Application.Services;
-using CleanArchitecture.Models;
+using CleanArchitecture.Application.Services.Interfaces;
+using CleanArchitecture.Domain.Models;
+using CleanArchitecture.Helpers.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.Controllers
 {
-    public class MotController : Controller
+    public class MotController : CleanArchitectureController
     {
-        MotService _motService;
+        private readonly IMotService _motService;
 
-        public MotController(MotService motService)
+        public MotController(IMotService motService)
         {
             _motService = motService;
         }
@@ -21,7 +23,7 @@ namespace CleanArchitecture.Controllers
             {
                 ActionResult result = StatusCode(500);
                 List<Mot> mots = await _motService.GetAllAsync();
-                if(mots.IsNotEmpty())
+                if (mots.IsNotEmpty())
                 {
                     result = Ok(mots);
                 }

@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Net;
+﻿using System.Text.Json;
 
-namespace CleanArchitecture.Application.Exceptions
+namespace CleanArchitecture.API.Exceptions
 {
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-
         public ExceptionMiddleware(RequestDelegate next)
         {
             _next = next;
@@ -24,14 +22,20 @@ namespace CleanArchitecture.Application.Exceptions
         }
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            await context.Response.WriteAsync(new ErrorDetails()
+            var response = context.Response;
+            response.ContentType = "application/json";
+            var responseModel = new ErrorDetails()
             {
                 StatusCode = context.Response.StatusCode,
                 Message = "Internal Server Error",
+                Source = exception.Source,
                 StackTrace = exception.StackTrace
-            }.ToString());
+            };
+
+
+            var result = JsonSerializer.Serialize(responseModel);
+
+            await response.WriteAsync(result);
         }
     }
 }

@@ -1,12 +1,16 @@
-﻿using CleanArchitecture.Infrastructure.Interfaces;
-using CleanArchitecture.Models.Base;
+﻿using CleanArchitecture.Application.Base;
+using CleanArchitecture.Domain.Base;
+using CleanArchitecture.Domain.Request;
+using CleanArchitecture.Infrastructure.Base;
+using CleanArchitecture.Infrastructure.Specifications.Base;
 using System.Linq.Expressions;
+using System.Security.Claims;
 
 namespace CleanArchitecture.Applications.Base
 {
-    public class BaseService<TRepository, TEntity> : IBaseService<TEntity>
-        where TRepository : IBaseRepository<TEntity>
-        where TEntity : BaseEntity
+    public class BaseService<TRepository, T> : IBaseService<T>
+        where TRepository : IBaseRepository<T>
+        where T : BaseEntity
     {
 
         protected readonly TRepository _repository;
@@ -15,19 +19,52 @@ namespace CleanArchitecture.Applications.Base
         {
             _repository = repository;
         }
-        public async Task<TEntity> GetById(int id)
+
+        public ClaimsPrincipal GetCurrentAuth()
+        {
+            return _repository.GetCurrentAuth();
+        }
+        public async Task<T> GetById(int id)
         {
             return await _repository.GetById(id);
         }
 
-        public async Task<List<TEntity>> GetAllAsync()
+        public async Task<T> GetBy(Expression<Func<T, bool>> where)
         {
-            return await _repository.GetAllAsync();
+            return await _repository.GetBy(where);
         }
-
-        public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> where)
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> where)
         {
             return await _repository.GetAllAsync(where);
+        }
+        public async Task<List<T>> GetAllAsync(IBaseSpecifications<T> baseSpecifications = null)
+        {
+            return await _repository.GetAllAsync(baseSpecifications);
+        }
+
+        public async Task<List<T>> GetAllAsync(string query, IBaseSpecifications<T> baseSpecifications = null)
+        {
+            return await _repository.GetAllAsync(query, baseSpecifications);
+        }
+
+        /*public async Task<List<T>> GetAllAsync(string query, List<MySqlParameter> parameters, IBaseSpecifications<T> baseSpecifications = null)
+        {
+            return await _repository.GetAllAsync(query, parameters, baseSpecifications);
+        }*/
+
+        public async Task<decimal> CountAllAsync()
+        {
+            return await _repository.CountAllAsync();
+        }
+
+        public async Task<decimal> CountAllAsync(Expression<Func<T, bool>> where)
+        {
+            return await _repository.CountAllAsync(where);
+        }
+
+        public async Task<List<T>> PageAllAsync(PageRequest? pageRequest, IBaseSpecifications<T>? baseSpecifications)
+        {
+            return await _repository.PageAllAsync(pageRequest, baseSpecifications);
         }
     }
 }

@@ -1,7 +1,6 @@
-﻿using CleanArchitecture.Application.Exceptions;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 
-namespace CleanArchitecture.Application.Extensions
+namespace CleanArchitecture.API.Exceptions
 {
     public static class ExceptionMiddlewareExtensions
     {

@@ -1,7 +1,7 @@
-﻿using CleanArchitecture.Applications.Base;
-using CleanArchitecture.Infrastructure.Interfaces.Repository;
-using CleanArchitecture.Infrastructure.Interfaces.Services;
-using CleanArchitecture.Models;
+﻿using CleanArchitecture.Application.Services.Interfaces;
+using CleanArchitecture.Applications.Base;
+using CleanArchitecture.Domain.Models;
+using CleanArchitecture.Infrastructure.Interfaces;
 
 namespace CleanArchitecture.Application.Services
 {

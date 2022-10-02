@@ -1,6 +1,5 @@
-﻿using CleanArchitecture.Application.Services;
-using CleanArchitecture.Infrastructure.Interfaces.Services;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace CleanArchitecture.Application
 {
@@ -9,7 +8,18 @@ namespace CleanArchitecture.Application
         public static void AddServices(this IServiceCollection services)
         {
             //Ajouter les services
-            services.AddScoped<IMotService, MotService>();
+            Assembly assembly = Assembly.GetExecutingAssembly();
+
+            assembly.GetTypes().Where(t => $"{assembly.GetName().Name}.Services" == t.Namespace
+                                        && !t.IsAbstract
+                                        && !t.IsInterface
+                                        && t.Name.EndsWith("Service"))
+            .Select(a => new { assignedType = a, serviceTypes = a.GetInterfaces().ToList() })
+            .ToList()
+            .ForEach(typesToRegister =>
+            {
+                typesToRegister.serviceTypes.ForEach(typeToRegister => services.AddScoped(typeToRegister, typesToRegister.assignedType));
+            });
         }
     }
 }
