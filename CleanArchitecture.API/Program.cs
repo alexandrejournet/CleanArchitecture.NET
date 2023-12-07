@@ -3,37 +3,76 @@ using CleanArchitecture.Application;
 using CleanArchitecture.Infrastructure;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Permet de mettre les routes en minuscule
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
-// builder.Services.AddDatabaseContext(builder.Configuration.GetConnectionString("Database"));
+#region Logger pour dev
+#if DEBUG
 
+ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+{
+    builder.ClearProviders();
+    builder.AddConsole();
+});
+#else
+ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+{
+    builder.AddFilter(DbLoggerCategory.Database.Command.Name, level => level == LogLevel.Information);
+});
+#endif
+#endregion
 
+#region Configuration des variables selon l'environnement
+// ASPNETCORE_ENVIRONMENT in API/Properties/launchSettings.json
+string env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+IConfigurationRoot configuration = builder.Configuration
+                    .AddJsonFile("appsettings.json", false, true)
+                    .AddJsonFile($"appsettings.{env}.json", true, true)
+                    .Build();
+#endregion
+
+#region Connexion BDD
+#if DEBUG
+string connectionStr = configuration.GetConnectionString("DefaultConnection");
+#else
+string connectionStr = Environment.GetEnvironmentVariable("MYSQLCONNSTR_MySQLDB");
+#endif
+
+builder.Services.AddDatabaseContext(connectionStr);
+// builder.Services.AddDatabaseContext(builder.Configuration.GetConnectionString("Database")); 
+#endregion
+
+#region Ajout du HttpContext pour pouvoir cancel les requêtes
 builder.Services.AddHttpContextAccessor();
-// Add services to the container.
+#endregion
 
+#region Ajout des services et repositories
 builder.Services.AddRepositories();
 builder.Services.AddServices();
+#endregion
 
-
+#region Ajout des controlleurs et suppression des objets null dans le flux
 builder.Services.AddControllers()
-    .AddNewtonsoftJson(opt =>
-    {
-        opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-        opt.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Local;
-        opt.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Include;
-        opt.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-    })
-        .AddControllersAsServices();
+.AddNewtonsoftJson(opt =>
+{
+    opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+    opt.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Local;
+    opt.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Include;
+    opt.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+})
+.AddControllersAsServices();
+#endregion
 
+#region Ajout de Swagger
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "myCRM - API", Version = "v" + typeof(Program).Assembly.GetCustomAttribute<AssemblyFileVersionAttribute>().Version });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "CleanArchitecture - Swagger", Version = "v1" });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description =
@@ -63,6 +102,11 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+#endregion
+
+// Ajout du cache
+// builder.Services.AddMemoryCache();
+
 
 var app = builder.Build();
 
@@ -75,8 +119,9 @@ if (app.Environment.IsDevelopment())
 
 app.ConfigureCustomExceptionMiddleware();
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

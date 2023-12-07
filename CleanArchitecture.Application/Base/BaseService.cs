@@ -1,12 +1,11 @@
-﻿using CleanArchitecture.Application.Base;
-using CleanArchitecture.Domain.Base;
-using CleanArchitecture.Domain.Request;
+﻿using CleanArchitecture.Domain.Base;
+using CleanArchitecture.Domain.DTO.Request;
 using CleanArchitecture.Infrastructure.Base;
-using CleanArchitecture.Infrastructure.Specifications.Base;
+using CleanArchitecture.Infrastructure.Specifications;
 using System.Linq.Expressions;
 using System.Security.Claims;
 
-namespace CleanArchitecture.Applications.Base
+namespace CleanArchitecture.Application.Base
 {
     public class BaseService<TRepository, T> : IBaseService<T>
         where TRepository : IBaseRepository<T>
@@ -37,12 +36,12 @@ namespace CleanArchitecture.Applications.Base
         {
             return await _repository.GetAllAsync(where);
         }
-        public async Task<List<T>> GetAllAsync(IBaseSpecifications<T> baseSpecifications = null)
+        public async Task<List<T>> GetAllAsync(ISpecification<T> baseSpecifications = null)
         {
             return await _repository.GetAllAsync(baseSpecifications);
         }
 
-        public async Task<List<T>> GetAllAsync(string query, IBaseSpecifications<T> baseSpecifications = null)
+        public async Task<List<T>> GetAllAsync(string query, ISpecification<T> baseSpecifications = null)
         {
             return await _repository.GetAllAsync(query, baseSpecifications);
         }
@@ -62,7 +61,7 @@ namespace CleanArchitecture.Applications.Base
             return await _repository.CountAllAsync(where);
         }
 
-        public async Task<List<T>> PageAllAsync(PageRequest? pageRequest, IBaseSpecifications<T>? baseSpecifications)
+        public async Task<List<T>> PageAllAsync(PageRequest? pageRequest, ISpecification<T>? baseSpecifications)
         {
             return await _repository.PageAllAsync(pageRequest, baseSpecifications);
         }

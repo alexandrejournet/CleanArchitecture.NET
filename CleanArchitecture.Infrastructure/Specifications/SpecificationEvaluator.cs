@@ -1,8 +1,8 @@
-﻿namespace CleanArchitecture.Infrastructure.Specifications.Base
+﻿namespace CleanArchitecture.Infrastructure.Specifications
 {
     public class SpecificationEvaluator<T> where T : class
     {
-        public static IQueryable<T> GetQuery(IQueryable<T> query, IBaseSpecifications<T>? specifications)
+        public static IQueryable<T> GetQuery(IQueryable<T> query, ISpecification<T>? specifications)
         {
             // Do not apply anything if specifications is null
             if (specifications == null)

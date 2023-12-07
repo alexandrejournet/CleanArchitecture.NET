@@ -8,17 +8,17 @@ namespace CleanArchitecture.Application
         public static void AddServices(this IServiceCollection services)
         {
             //Ajouter les services
-            Assembly assembly = Assembly.GetExecutingAssembly();
+            Assembly assembly = typeof(DependencyInjection).Assembly;
 
             assembly.GetTypes().Where(t => $"{assembly.GetName().Name}.Services" == t.Namespace
                                         && !t.IsAbstract
                                         && !t.IsInterface
                                         && t.Name.EndsWith("Service"))
-            .Select(a => new { assignedType = a, serviceTypes = a.GetInterfaces().ToList() })
+            .Select(a => new { assignedType = a })
             .ToList()
             .ForEach(typesToRegister =>
             {
-                typesToRegister.serviceTypes.ForEach(typeToRegister => services.AddScoped(typeToRegister, typesToRegister.assignedType));
+                services.AddScoped(typesToRegister.assignedType);
             });
         }
     }

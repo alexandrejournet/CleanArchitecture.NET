@@ -8,7 +8,7 @@ namespace CleanArchitecture.Infrastructure
     public static class DependencyInjection
     {
 
-        public static void AddDatabaseContext(this IServiceCollection services, string config)
+        public static void AddDatabaseContext(this IServiceCollection services, string config, bool automigrate = true)
         {
             // Récupérer la config du appsettings depuis builder.Configuration dans Program.cs
             #region MySQL
@@ -16,10 +16,21 @@ namespace CleanArchitecture.Infrastructure
                 {
                     options.EnableSensitiveDataLogging(true);
                     options.UseMySql(config, ServerVersion.AutoDetect(config));
-                }, ServiceLifetime.Transient); 
+                }, ServiceLifetime.Transient);
             #endregion
 
-            services.BuildServiceProvider().GetService<CoreDbContext>().Database.Migrate();
+            #region PostgreSQL
+            /*services.AddDbContext<CoreDbContext>(options =>
+            {
+                options.EnableSensitiveDataLogging(true);
+                options.UseNpgsql(config);
+            }, ServiceLifetime.Transient);*/
+            #endregion
+
+            if (automigrate)
+            {
+                services.BuildServiceProvider().GetService<CoreDbContext>().Database.Migrate();
+            }
         }
 
         public static void AddRepositories(this IServiceCollection services)
@@ -31,11 +42,11 @@ namespace CleanArchitecture.Infrastructure
                                         && !t.IsAbstract
                                         && !t.IsInterface
                                         && t.Name.EndsWith("Repository"))
-            .Select(a => new { assignedType = a, serviceTypes = a.GetInterfaces().ToList() })
+            .Select(a => new { assignedType = a })
             .ToList()
             .ForEach(typesToRegister =>
             {
-                typesToRegister.serviceTypes.ForEach(typeToRegister => services.AddScoped(typeToRegister, typesToRegister.assignedType));
+                services.AddScoped(typesToRegister.assignedType);
             });
         }
     }

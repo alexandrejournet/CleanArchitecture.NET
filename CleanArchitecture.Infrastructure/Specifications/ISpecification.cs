@@ -1,23 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
-namespace CleanArchitecture.Infrastructure.Specifications.Base
+namespace CleanArchitecture.Infrastructure.Specifications
 {
-    public interface IBaseSpecifications<T>
+    public interface ISpecification<T>
     {
         // Filter Conditions
-        Expression<Func<T, bool>> FilterCondition { get; }
+        Expression<Func<T, bool>>? FilterCondition { get; }
 
         // Order By Ascending
-        Expression<Func<T, object>> OrderBy { get; }
+        Expression<Func<T, object>>? OrderBy { get; }
 
         // Order By Descending
-        Expression<Func<T, object>> OrderByDescending { get; }
+        Expression<Func<T, object>>? OrderByDescending { get; }
 
         // Include collection to load related data
         List<Func<IQueryable<T>, IIncludableQueryable<T, object>>> Includes { get; }
 
         // GroupBy expression
-        Expression<Func<T, object>> GroupBy { get; }
+        Expression<Func<T, object>>? GroupBy { get; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using CleanArchitecture.Domain.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 namespace CleanArchitecture.Infrastructure.Database
@@ -10,8 +9,6 @@ namespace CleanArchitecture.Infrastructure.Database
         public CoreDbContext(DbContextOptions<CoreDbContext> options)
             : base(options)
         { }
-
-        public DbSet<Mot> Mot { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

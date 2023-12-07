@@ -1,15 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
+﻿using CleanArchitecture.Domain.Base;
+using CleanArchitecture.Domain.DTO.Request;
 using CleanArchitecture.Infrastructure.Database;
-using CleanArchitecture.Domain.Request;
-using CleanArchitecture.Infrastructure.Specifications.Base;
-using System.Security.Claims;
-using CleanArchitecture.Domain.Base;
+using CleanArchitecture.Infrastructure.Specifications;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using System.Security.Claims;
 
 namespace CleanArchitecture.Infrastructure.Base
 {
-    public class BaseRepository<T, TContext> : IBaseRepository<T> 
+    public class BaseRepository<T, TContext> : IBaseRepository<T>
         where T : BaseEntity
         where TContext : CoreDbContext
     {
@@ -37,7 +37,7 @@ namespace CleanArchitecture.Infrastructure.Base
         public async Task<T> GetBy(Expression<Func<T, bool>> where)
         {
             return await SpecificationEvaluator<T>
-                        .GetQuery(_dbContext.Set<T>().AsQueryable(), new BaseSpecifications<T>(where))
+                        .GetQuery(_dbContext.Set<T>().AsQueryable(), new Specification<T>(where))
                         .AsNoTracking()
                         .FirstOrDefaultAsync(_cancellationToken);
         }
@@ -47,12 +47,12 @@ namespace CleanArchitecture.Infrastructure.Base
             return await GetAllQueryable(where).ToList(_cancellationToken);
         }
 
-        public async Task<List<T>> GetAllAsync(IBaseSpecifications<T>? baseSpecifications)
+        public async Task<List<T>> GetAllAsync(ISpecification<T>? baseSpecifications)
         {
             return await GetAllQueryable(baseSpecifications).ToList(_cancellationToken);
         }
 
-        public async Task<List<T>> GetAllAsync(string query, IBaseSpecifications<T>? baseSpecifications)
+        public async Task<List<T>> GetAllAsync(string query, ISpecification<T>? baseSpecifications)
         {
             try
             {
@@ -80,7 +80,7 @@ namespace CleanArchitecture.Infrastructure.Base
         public async Task<decimal> CountAllAsync(Expression<Func<T, bool>> where)
         {
             return await SpecificationEvaluator<T>.GetQuery(_dbContext.Set<T>()
-                   .AsQueryable(), new BaseSpecifications<T>(where))
+                   .AsQueryable(), new Specification<T>(where))
                    .AsNoTracking()
                    .CountAsync(_cancellationToken);
         }
@@ -98,18 +98,18 @@ namespace CleanArchitecture.Infrastructure.Base
         public IQueryable<T> GetAllQueryable(Expression<Func<T, bool>> where)
         {
             return SpecificationEvaluator<T>.GetQuery(_dbContext.Set<T>()
-                    .AsQueryable(), new BaseSpecifications<T>(where))
+                    .AsQueryable(), new Specification<T>(where))
                     .AsNoTracking();
         }
 
-        public IQueryable<T> GetAllQueryable(IBaseSpecifications<T>? baseSpecifications)
+        public IQueryable<T> GetAllQueryable(ISpecification<T>? baseSpecifications)
         {
             return SpecificationEvaluator<T>.GetQuery(_dbContext.Set<T>()
                 .AsQueryable(), baseSpecifications)
                 .AsNoTracking();
         }
 
-        public IQueryable<T> GetAllQueryable(string query, IBaseSpecifications<T>? baseSpecifications)
+        public IQueryable<T> GetAllQueryable(string query, ISpecification<T>? baseSpecifications)
         {
             return SpecificationEvaluator<T>.GetQuery(_dbContext.Set<T>()
                 .FromSqlRaw(query), baseSpecifications)
@@ -123,12 +123,12 @@ namespace CleanArchitecture.Infrastructure.Base
                 .AsNoTracking();
         }*/
 
-        public async Task<List<T>> PageAllAsync(PageRequest? pageRequest, IBaseSpecifications<T>? baseSpecifications)
+        public async Task<List<T>> PageAllAsync(PageRequest? pageRequest, ISpecification<T>? baseSpecifications)
         {
             return await PageAllQueryable(pageRequest, baseSpecifications).ToList(_cancellationToken);
         }
 
-        public IQueryable<T> PageAllQueryable(PageRequest? pageRequest, IBaseSpecifications<T>? baseSpecifications)
+        public IQueryable<T> PageAllQueryable(PageRequest? pageRequest, ISpecification<T>? baseSpecifications)
         {
             var pageSize = 10;
             var lineToSkip = 0;
@@ -149,7 +149,7 @@ namespace CleanArchitecture.Infrastructure.Base
         public async Task<bool> AnyAsync(Expression<Func<T, bool>> where)
         {
             return await SpecificationEvaluator<T>.GetQuery(_dbContext.Set<T>()
-                   .AsQueryable(), new BaseSpecifications<T>(where))
+                   .AsQueryable(), new Specification<T>(where))
                    .AsNoTracking()
                    .AnyAsync(_cancellationToken);
         }

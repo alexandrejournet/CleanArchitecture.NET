@@ -1,8 +1,8 @@
 ﻿using CleanArchitecture.Domain.Base;
 
-namespace CleanArchitecture.Domain.Models
+namespace CleanArchitecture.Domain.BO
 {
-    public class Mot : BaseEntity
+    public class Entity : BaseEntity
     {
         public string Text { get; set; }
     }

@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using CleanArchitecture.Domain.Exceptions;
+using System.Text.Json;
 
 namespace CleanArchitecture.API.Exceptions
 {
@@ -15,25 +16,29 @@ namespace CleanArchitecture.API.Exceptions
             {
                 await _next(httpContext);
             }
-            catch (Exception ex)
+            catch (ProjectException ex)
             {
                 await HandleExceptionAsync(httpContext, ex);
             }
         }
-        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private static async Task HandleExceptionAsync(HttpContext context, ProjectException exception)
         {
             var response = context.Response;
             response.ContentType = "application/json";
+            response.StatusCode = exception.StatusCode ?? StatusCodes.Status500InternalServerError;
             var responseModel = new ErrorDetails()
             {
                 StatusCode = context.Response.StatusCode,
-                Message = "Internal Server Error",
-                Source = exception.Source,
-                StackTrace = exception.StackTrace
+                Message = exception.Message ?? "Internal Server Error",
+                Source = exception.Source
             };
 
 
-            var result = JsonSerializer.Serialize(responseModel);
+            string result = JsonSerializer.Serialize(responseModel, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            });
 
             await response.WriteAsync(result);
         }
