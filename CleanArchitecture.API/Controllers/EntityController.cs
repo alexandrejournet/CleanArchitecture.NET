@@ -1,7 +1,7 @@
 ﻿using CleanArchitecture.API.Base;
 using CleanArchitecture.Application.Services;
 using CleanArchitecture.Domain.BO;
-using CleanArchitecture.Helpers.Extensions;
+using CleanArchitecture.Domain.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.API.Controllers

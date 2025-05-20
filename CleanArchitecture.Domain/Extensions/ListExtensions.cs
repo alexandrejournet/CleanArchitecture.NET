@@ -1,4 +1,4 @@
-﻿namespace CleanArchitecture.Helpers.Extensions
+﻿namespace CleanArchitecture.Domain.Extensions
 {
     public static class ListExtensions
     {
